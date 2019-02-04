@@ -13,6 +13,8 @@ People with different background often have different sense of happiness. For ex
 
 Here's a quick overview about the finding:
 
+* All age groups mainly express feeling about positve, trust, joy and anticipation.
+
 * Boyfriend and girlfriend are mentioned most by 10-20 age group; husband, wife, son and daughter are mentioned more in the rest age groups. Friend and family are the keywords to all age groups.
 
 * "Father" tends to mentioned more about "work" while "mother" tends to mentioned more about family.
@@ -134,9 +136,11 @@ sentiment_score <- sentiment_score[! is.na(sentiment_score$age_group),]
 
 sentiment_score$age_group <- factor(sentiment_score$age_group,levels=c("10-20","20-30","30-40","40-50","50-100"))
 
+# Draw the plot
 ggplot()+
   geom_boxplot(data=sentiment_score,mapping=aes(x=age_group,y=score))+
-  ggtitle("Sentiment score of different age groups")
+  ggtitle("Sentiment score of different age groups")+
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
 From the above plot, we can see that the range and median of the sentiment score of different age groups are almost the same. It show that they have similar happy level.
@@ -147,7 +151,7 @@ The negative dots shown in the plot is due to the limit of this method. The sent
 
 __Sentiment Category__
 
-This part is grouping words into 10 segments: anger, anticipation, disgust, fear, joy, neagtive, positive, sadness, suprise and trust. Instead of measuring how strong the words are, it tries to find out what feelings different words express.
+This part is grouping words into 10 segments: anger, anticipation, disgust, fear, joy, neagtive, positive, sadness, suprise and trust. Instead of measuring how strong the feeling of words are, it tries to find out what feelings different words express.
 
 ```{r echo=FALSE,warning=FALSE,message=FALSE}
 # Sentiment category
@@ -161,15 +165,14 @@ sentiment_category <- bag_of_words%>%
     age>50 & age<=99 ~ "50-100"
   ))
 
+# Remove na data
 setDT(sentiment_category)
 sentiment_category <- sentiment_category[! is.na(sentiment_category$age_group)]
 
+# Group by age group and sentiment 
 s_c <- sentiment_category[,.N,by=.(age_group,sentiment)]
 
-#ggplot()+
-#  geom_col(data=s_c,mapping=aes(x=sentiment,y=N))+
-#  facet_grid(age_group ~ .)
-
+# Change counting into percentage
 s_c2 <- s_c %>% 
   group_by(age_group) %>% 
   summarise(count=sum(N)) %>% 
@@ -180,8 +183,11 @@ s_c2 <- s_c %>%
 
 ggplot(s_c2, aes(x = factor(age_group), y = perc*100, fill = factor(sentiment))) +
   geom_bar(stat="identity", width = 0.7)+
-  labs(x = "age group", y = "Percentage", fill = "Sentiment Category")
+  labs(x = "age group", y = "Percentage", fill = "Sentiment Category")+
+  ggtitle("Percentage of sentiment category of different age groups")+
+  theme(plot.title = element_text(hjust = 0.5))
 ```
+
 
 From the above plot, we can see the sentences mainly express feeling about positve, trust, joy and anticipation.
 
@@ -202,6 +208,8 @@ bag_of_words <- bag_of_words[! is.na(bag_of_words$age)]
 
 # define the "person" vector, select top 10 mentioned word from each age group
 person <- c("friend","girlfriend","family","people","boyfriend","sister","mom","dad","girl","brother","couple","parents","students","cousin","boy","husband","wife","daughter","son","granddaughter","grandson","kids","baby")
+
+# This is a plot-drawing function. Parameter "i" refers to the i-th age group, "aspect" expects a vector that contains the words you try to find
 g1.fun <- function(i,aspect)
 {
   age.lower <- c(10,20,30,40,50)[i]
@@ -221,7 +229,7 @@ g1.fun <- function(i,aspect)
 library(grid)
 library(gridExtra)
 library(lattice)
-grid.arrange(g1.fun(1,person),g1.fun(2,person),g1.fun(3,person),g1.fun(4,person),g1.fun(5,person), nrow = 3)
+grid.arrange(g1.fun(1,person),g1.fun(2,person),g1.fun(3,person),g1.fun(4,person),g1.fun(5,person), nrow = 3,top="Mentioned relation by age group")
 ```
 
 From the above plot, we can see that "friend" is the word that mentioned most among all age groups. It shows that friends are crucial to happiness.
@@ -229,19 +237,15 @@ From the above plot, we can see that "friend" is the word that mentioned most am
 Not suprisingly, boyfriend and girlfriend are top mentioned words for 10-20 age group. As age increases, top mentioned words are husband and wife, son and daughter, gandson and granddaughter.
 
 
-
-
 __Verb__
 
 ```{r echo=FALSE,warning=FALSE,message=FALSE}
 verb <- c("played","feel","enjoyed","finished","found","bought","watched","received","talked","started","passed","eat","completed","learned","told","spend","buy","called","planted","won","helped","cleaned","meet","pay","cooked","attended","read","shopping","run","celebrated")
 
-grid.arrange(g1.fun(1,verb),g1.fun(2,verb),g1.fun(3,verb),g1.fun(4,verb),g1.fun(5,verb), nrow = 3)
+grid.arrange(g1.fun(1,verb),g1.fun(2,verb),g1.fun(3,verb),g1.fun(4,verb),g1.fun(5,verb), nrow = 3,top="Mentioned verb by age group")
 ```
 
 The top mentioned verbs among all age groups are "feel", "found", "bought". "Eat" has also been mentioned a lot. I personally agree with this one as well since eating is quiting relieving.
-
-
 
 
 __About Objects__
@@ -249,7 +253,7 @@ __About Objects__
 ```{r echo=FALSE,warning=FALSE,message=FALSE}
 object <- c("dog","school","game","college","class","moment","home","job","visit","exam","dinner","birthday","food","car","grade","test","money","lunch","pizza","movie","study","project","smile","house","birthday","cat","phone","neighbor","garden","store","weather","vacation","yard","rain","book","project","trip","gift","card","coffee","tv","party","video","team","promotion","summer","smile","pizza","grade")
 
-grid.arrange(g1.fun(1,object),g1.fun(2,object),g1.fun(3,object),g1.fun(4,object),g1.fun(5,object), nrow = 3)
+grid.arrange(g1.fun(1,object),g1.fun(2,object),g1.fun(3,object),g1.fun(4,object),g1.fun(5,object), nrow = 3,top="Mentioned object by age group")
 ```
 
 
@@ -286,7 +290,7 @@ g2.fun <- function(i)
   return(g)
 }
 
-grid.arrange(g2.fun(1),g2.fun(2),g2.fun(3),g2.fun(4),g2.fun(5), nrow = 3)
+grid.arrange(g2.fun(1),g2.fun(2),g2.fun(3),g2.fun(4),g2.fun(5), nrow = 3,top="Bigram by age group")
 ```
 
 
@@ -325,10 +329,10 @@ g4 <- ggplot()+
   ggtitle("Mother")+
   coord_flip()
 
-grid.arrange(g1,g2,g3,g4, nrow = 2)
+grid.arrange(g1,g2,g3,g4, nrow = 2,top="Mentioned words by gender and parenthood")
 ```
 
-From above plot, we can see that work is the top mentioned word by male. "Father" tend to mentioned more "work" that non-parent males. This may due to the resposibilty to support the family.
+From above plot, we can see that work is the top mentioned word by male. "Father" tend to mentioned more "work" that non-parent males.
 
 For females, son, husband and daughter are the top mentioned words by "mother". They are mentioned more times than "work".
 
