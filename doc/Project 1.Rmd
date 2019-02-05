@@ -37,8 +37,8 @@ if(length(packages.needed)>0){
 
 # Read data
 library(data.table)
-urlfile<-'https://raw.githubusercontent.com/rit-public/HappyDB/master/happydb/data/cleaned_hm.csv'
-hm_data <- fread(urlfile)
+# urlfile<-'https://raw.githubusercontent.com/rit-public/HappyDB/master/happydb/data/cleaned_hm.csv'
+hm_data <- fread("../data/cleaned_hm.csv")
 
 # Lower the characters; remove numbers, punctuation,stop words & empty word
 library(tm)
@@ -73,8 +73,8 @@ hm_data <- hm_data%>%
   select(wid,cleaned_hm,predicted_category,text)
 
 # Inner join demographic data
-urlfile<-'https://raw.githubusercontent.com/rit-public/HappyDB/master/happydb/data/demographic.csv'
-demo_data <- fread(urlfile)
+# urlfile<-'https://raw.githubusercontent.com/rit-public/HappyDB/master/happydb/data/demographic.csv'
+demo_data <- fread("../data/demographic.csv")
 
 hm_data <- hm_data%>%
   inner_join(demo_data,by="wid")%>%
