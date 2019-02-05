@@ -12,7 +12,7 @@ Term: Spring 2019
 + Projec title: __How Background Affects Happiness__
 + This project is conducted by __Zeyu Yang__
 
-+ Project summary: People with different background often have different sense of happiness. Age along with other factors such as gender, parenthood and so on could greatly change the way people think of happiness. This data story is going to find out how background(age, gender and parenthood) affects happiness. The techniques that have been used in this project is: text processing, text mining and sentimental analysis.
++ Project summary: People with different background often have different sense of happiness. Age along with other factors such as gender, parenthood and so on could greatly change the way people think of happiness. This data story is going to find out how background(age, gender and parenthood) affects happiness. The techniques that have been used in this project are: text processing, text mining and sentimental analysis.
 
 + Project finding:
   
