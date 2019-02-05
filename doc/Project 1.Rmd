@@ -256,42 +256,9 @@ object <- c("dog","school","game","college","class","moment","home","job","visit
 grid.arrange(g1.fun(1,object),g1.fun(2,object),g1.fun(3,object),g1.fun(4,object),g1.fun(5,object), nrow = 3,top="Mentioned object by age group")
 ```
 
+"Game" shows up in 10-20, 30-40 and 40-50 age group. It was mentioned most in 10-20 age group and the least in 40-50 age group.
 
-
-
-
-## Bigram
-
-Finally, let's take a look at the bigram they use.
-
-```{r echo=FALSE,warning=FALSE,message=FALSE}
-library(ngram)
-hm_bigrams <- hm_data %>%
-  mutate(count =sapply(hm_data$text, wordcount))%>%
-  filter(count != 1) %>%
-  unnest_tokens(bigram, text, token = "ngrams", n = 2)
-
-setDT(hm_bigrams)
-hm_bigrams <- transform(hm_bigrams, age = as.numeric(age))
-hm_bigrams <- hm_bigrams[! is.na(hm_bigrams$age)]
-
-g2.fun <- function(i)
-{
-  age.lower <- c(10,20,30,40,50)[i]
-  age.upper <- c(20,30,40,50,100)[i]
-  temp <- hm_bigrams[age >age.lower & age <=age.upper,.N,by = .(bigram)][order(-N)][1:10]
-  temp$bigram <- factor(temp$bigram,levels=temp$bigram[seq(10,1,-1)])
-  t <- paste(age.lower,"-",age.upper)
-  color = c("#ADD8E6","#87CEEB","#6495ED","#4169E1","#0000CD","#000080")
-  g <- ggplot()+
-  geom_bar(data=data.frame(temp),mapping=aes(bigram,N),stat = "identity",fill=color[i])+
-  ggtitle(t)+
-  coord_flip()
-  return(g)
-}
-
-grid.arrange(g2.fun(1),g2.fun(2),g2.fun(3),g2.fun(4),g2.fun(5), nrow = 3,top="Bigram by age group")
-```
+"School" shows up in first 4 age groups as well. But they might caused by different reasons. Younger one is more likely to be happy because of their own experience at school. Elder ones might be happy about their child at school.
 
 
 
