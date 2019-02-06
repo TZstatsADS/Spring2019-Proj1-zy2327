@@ -17,6 +17,10 @@ Here's a quick overview about the finding:
 
 * Boyfriend and girlfriend are mentioned most by 10-20 age group; husband, wife, son and daughter are mentioned more in the rest age groups. Friend and family are the keywords to all age groups.
 
+* Married males are happier than single ones while married females remain the same level of happiness as single ones.
+
+* Parenthood makes both gender happier.
+
 * "Father" tends to mentioned more about "work" while "mother" tends to mentioned more about family.
 
 ```{r install packages,echo=FALSE}
@@ -262,7 +266,61 @@ grid.arrange(g1.fun(1,object),g1.fun(2,object),g1.fun(3,object),g1.fun(4,object)
 
 
 
-## Gender & Parenthood
+# Gender, marital & Parenthood
+
+Gender, marital & parenthood are factors other than age that might affects the sense of happiness. For example, being married or being parents is likely to make people happier.
+
+## Gender & marital
+
+This part will explore whether being married would brings people happiness.
+
+```{r echo=FALSE}
+setDT(sentiment_score)
+sentiment_score[,.('mean score'=mean(score)),by=.(gender,marital)][order(gender,marital)]
+```
+
+From the above chart, it seems that males are happier when married while females maintain the same level of happiness. To validate this, here's a t test:
+
+```{r echo=FALSE}
+# Select the score by gender and marital
+male.married <- sentiment_score[gender=="m" & marital=="married"][,.(score)]
+male.single <- sentiment_score[gender=="m" & marital=="single"][,.(score)]
+female.married <- sentiment_score[gender=="f" & marital=="married"][,.(score)]
+female.single <- sentiment_score[gender=="f" & marital=="single"][,.(score)]
+```
+
+```{r}
+t.test(male.single,male.married)
+```
+
+
+```{r}
+t.test(female.single,female.married)
+```
+
+
+We can see that it is true married males would be happier.
+
+## Gender & parenthood
+
+```{r echo=FALSE}
+sentiment_score[,mean(score),by=.(gender,parenthood)][order(gender)]
+```
+
+While marital status has different effects on males and females, parenthood makes both gender happier. We can validate by conducting a t test:
+
+
+```{r echo=FALSE}
+parent <- sentiment_score[parenthood=="y"][,.(score)]
+nonparent <- sentiment_score[parenthood=="y"][,.(score)]
+```
+
+```{r}
+t.test(parent,nonparent)
+```
+
+Next, let's take a look at how happiness is affected by gender and parenthood.
+
 ```{r echo=FALSE}
 # non-parent by gender
 male <- bag_of_words[gender == "m" & parenthood == "n",.N,by = .(word)][order(-N)]
