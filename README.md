@@ -19,6 +19,10 @@ Term: Spring 2019
   * All age groups mainly express feeling about positve, trust, joy and anticipation.
 
   * Boyfriend and girlfriend are mentioned most by 10-20 age group; husband, wife, son and daughter are mentioned more in the rest age groups. Friend and family are the keywords to all age groups.
+  
+  * Married males are happier than single ones while married females remain the same level of happiness as single ones.
+  
+  * Parenthood makes both gender happier.
 
   * "Father" tends to mentioned more about "work" while "mother" tends to mentioned more about family.
 
