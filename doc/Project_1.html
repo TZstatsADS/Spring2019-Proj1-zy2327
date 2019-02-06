@@ -272,11 +272,11 @@ $(document).ready(function () {
 </div>
 <div id="gender-parenthood" class="section level2">
 <h2>Gender &amp; parenthood</h2>
-<pre><code>##    gender parenthood       V1
-## 1:      f          y 1.525225
-## 2:      f          n 1.516134
-## 3:      m          y 1.570979
-## 4:      m          n 1.515167</code></pre>
+<pre><code>##    gender parenthood mean score
+## 1:      f          y   1.525225
+## 2:      f          n   1.516134
+## 3:      m          y   1.570979
+## 4:      m          n   1.515167</code></pre>
 <p>While marital status has different effects on males and females, parenthood makes both gender happier. We can validate by conducting a t test:</p>
 <pre class="r"><code>t.test(parent,nonparent)</code></pre>
 <pre><code>## 
